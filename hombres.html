@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Mi Tienda de Ropa</title>
+    <title>Hombres - Mi Tienda de Ropa</title>
     <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,7 +12,7 @@
     <header class="bg-[#131313] p-4 text-center">
         <div class="flex justify-between items-center">
             <h1 class="text-4xl font-bold text-white mx-auto">Mi Tienda de Ropa</h1>
-            <button id="menu-btn" class="block lg:hidden bg-white text-white p-2 rounded-md">
+            <button id="menu-btn" class="block lg:hidden bg-green-600 text-white p-2">
                 <img alt="Menú" class="h-6 w-6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAExJREFUSEtjZKAxYKSx+QyjFhAM4QEJov8EnYVfAYqjsfmA5hZQ6AFU7QMSBzT3Ac3jgOYW0DyIhr4FNI8Dmlsw9ONg1AcoIUDz0hQAbegGGXzv/l0AAAAASUVORK5CYII="/>
             </button>
         </div>
@@ -31,12 +31,26 @@
         </nav>
     </header>
 
-    <section class="seccion-principal h-screen bg-cover bg-center" style="background-image: url('https://img.freepik.com/fotos-premium/vibrante-exhibicion-ropa-al-menor_406939-33506.jpg');">
-        <div class="superposicion flex items-center justify-center h-full">
-            <div class="text-center text-white p-4">
-                <h1 class="titulo-principal text-3xl md:text-5xl font-bold mb-4">Nada mejor que toda una <span class="resaltado">vida juntos</span></h1>
-                <p class="subtitulo-principal text-lg md:text-xl mb-6">Explora nuestra tienda y descubre las mejores prendas para cada ocasión</p>
-                <a href="hombres.html" class="boton-cta bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded">Ver Colección</a>
+    <section class="hombres-seccion p-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Colección para Hombres</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="producto bg-white shadow-md p-4 text-center rounded-md">
+                <img src="https://via.placeholder.com/150" alt="Producto 1" class="mx-auto">
+                <h3 class="text-lg font-bold mt-2 text-black">Producto 1</h3>
+                <p class="text-gray-600">$19.99</p>
+                <a href="#" class="boton-cta mt-2 block text-center text-white bg-green-600 p-2 rounded-md">Comprar</a>
+            </div>
+            <div class="producto bg-white shadow-md p-4 text-center rounded-md">
+                <img src="https://via.placeholder.com/150" alt="Producto 2" class="mx-auto">
+                <h3 class="text-lg font-bold mt-2 text-black">Producto 2</h3>
+                <p class="text-gray-600">$29.99</p>
+                <a href="#" class="boton-cta mt-2 block text-center text-white bg-green-600 p-2 rounded-md">Comprar</a>
+            </div>
+            <div class="producto bg-white shadow-md p-4 text-center rounded-md">
+                <img src="https://via.placeholder.com/150" alt="Producto 3" class="mx-auto">
+                <h3 class="text-lg font-bold mt-2 text-black">Producto 3</h3>
+                <p class="text-gray-600">$39.99</p>
+                <a href="#" class="boton-cta mt-2 block text-center text-white bg-green-600 p-2 rounded-md">Comprar</a>
             </div>
         </div>
     </section>
@@ -67,6 +81,5 @@
             menu.classList.toggle('hidden');
         });
     </script>
-    
 </body>
 </html>

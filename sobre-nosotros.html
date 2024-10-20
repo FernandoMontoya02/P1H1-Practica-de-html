@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Mi Tienda de Ropa</title>
+    <title>Hombres - Mi Tienda de Ropa</title>
     <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,7 +12,7 @@
     <header class="bg-[#131313] p-4 text-center">
         <div class="flex justify-between items-center">
             <h1 class="text-4xl font-bold text-white mx-auto">Mi Tienda de Ropa</h1>
-            <button id="menu-btn" class="block lg:hidden bg-white text-white p-2 rounded-md">
+            <button id="menu-btn" class="block lg:hidden bg-green-600 text-white p-2">
                 <img alt="Menú" class="h-6 w-6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAExJREFUSEtjZKAxYKSx+QyjFhAM4QEJov8EnYVfAYqjsfmA5hZQ6AFU7QMSBzT3Ac3jgOYW0DyIhr4FNI8Dmlsw9ONg1AcoIUDz0hQAbegGGXzv/l0AAAAASUVORK5CYII="/>
             </button>
         </div>
@@ -31,16 +31,22 @@
         </nav>
     </header>
 
-    <section class="seccion-principal h-screen bg-cover bg-center" style="background-image: url('https://img.freepik.com/fotos-premium/vibrante-exhibicion-ropa-al-menor_406939-33506.jpg');">
-        <div class="superposicion flex items-center justify-center h-full">
-            <div class="text-center text-white p-4">
-                <h1 class="titulo-principal text-3xl md:text-5xl font-bold mb-4">Nada mejor que toda una <span class="resaltado">vida juntos</span></h1>
-                <p class="subtitulo-principal text-lg md:text-xl mb-6">Explora nuestra tienda y descubre las mejores prendas para cada ocasión</p>
-                <a href="hombres.html" class="boton-cta bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded">Ver Colección</a>
+    <main class="contenido">
+        <section class="sobre-nosotros-seccion p-8 text-center">
+            <h2 class="text-2xl font-bold mb-4">Sobre Nosotros</h2>
+            <p class="mb-4">Bienvenidos a Mi Tienda de Ropa, un lugar donde la moda se convierte en una expresión única de tu personalidad. Desde nuestra fundación en 2024, hemos estado comprometidos con ofrecer no solo prendas de calidad, sino también una experiencia de compra excepcional que celebra la diversidad y el estilo de cada individuo.</p>
+            <p class="mb-4">Nuestro equipo está formado por amantes de la moda que creen en el poder de una buena vestimenta. Cada día, nos dedicamos a buscar las mejores colecciones, aquellas que cuenten una historia y resalten tu belleza única. Sabemos que la ropa no solo es un conjunto de telas, sino una forma de arte que puede transformarte y empoderarte.</p>
+            <p class="mb-4">Además de ofrecer una amplia gama de estilos para hombres y mujeres, también estamos comprometidos con la sostenibilidad y la responsabilidad social. Trabajamos con proveedores que comparten nuestros valores, asegurándonos de que nuestras prendas se producen de manera ética y responsable. Creemos que cada compra que realizas no solo es un reflejo de tu estilo, sino también una oportunidad para hacer una diferencia positiva en el mundo.</p>
+            <p class="mb-4">Gracias por elegirnos y por permitirnos ser parte de tu viaje de estilo. Esperamos verte pronto, y estamos emocionados de acompañarte en cada paso de tu camino hacia el estilo que te define.</p>
+            <div class="mt-6">
+                <img src="https://media.istockphoto.com/id/1176105363/es/foto/se-adapta-muy-bien.jpg?s=612x612&w=0&k=20&c=cn1x0IncOtHqZvpaeAPb5h9mQCgGwfxG23hTSZr9WUs=" alt="Sobre nosotros" class="rounded-full w-90 h-64 object-cover mx-auto">
             </div>
-        </div>
-    </section>
-
+        </section>
+    </main>
+    
+    
+    
+    
     <footer class="pie-pagina bg-[#2B2B2B] text-white p-4">
         <div class="container mx-auto text-center">
             <p>Síguenos en nuestras redes:</p>
@@ -67,6 +73,5 @@
             menu.classList.toggle('hidden');
         });
     </script>
-    
 </body>
 </html>
