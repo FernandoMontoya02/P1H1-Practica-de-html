@@ -263,11 +263,6 @@
             document.getElementById('modalAgregar').classList.add('hidden');
         });
 
-        document.getElementById("cerrarModalEditar").addEventListener("click", function () {
-            document.getElementById('modalEditar').classList.add('hidden');
-        });
-
-
         // Función para agregar un producto
         document.getElementById('agregarProductoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -299,7 +294,11 @@
             }
         });
 
-        // Función para editar un producto
+        document.getElementById("cerrarModalEditar").addEventListener("click", function () {
+            document.getElementById('modalEditar').classList.add('hidden');
+        });
+
+        // Cambia esto en la función editarProducto
         async function editarProducto(id) {
             try {
                 const response = await fetch(`http://localhost:3000/productos/${id}`);
@@ -311,7 +310,10 @@
                 document.getElementById('edit_pro_pre').value = producto.pro_pre;
                 document.getElementById('edit_pro_stock').value = producto.pro_stock;
                 document.getElementById('edit_pro_img').value = producto.pro_img;
-                document.getElementById('modalEditar').style.display = "block";
+
+                // Cambia aquí
+                document.getElementById('modalEditar').classList.remove('hidden');
+
                 document.getElementById('editarProductoForm').onsubmit = async (e) => {
                     e.preventDefault();
                     const productoActualizado = {
@@ -331,7 +333,7 @@
                         if (updateResponse.ok) {
                             alert('Producto editado correctamente');
                             document.getElementById('editarProductoForm').reset();
-                            document.getElementById('modalEditar').style.display = "none";
+                            document.getElementById('modalEditar').classList.add('hidden'); // Cambiado aquí
                             mostrarProductos();
                         } else {
                             alert('Error al editar el producto');
@@ -346,6 +348,7 @@
                 alert('Error al cargar el producto para edición');
             }
         }
+
         // Función para eliminar un producto
         async function eliminarProducto(id) {
             if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
