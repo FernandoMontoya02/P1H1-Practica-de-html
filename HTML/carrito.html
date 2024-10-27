@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Mi Tienda de Ropa</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-black text-white">
+
+    <header class="bg-[#131313] p-4 text-center">
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-bold text-white mx-auto">Mi Tienda de Ropa</h1>
+            <button id="menu-btn" class="block lg:hidden bg-white text-white p-2 rounded-md">
+                <img alt="Menú" class="h-6 w-6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAExJREFUSEtjZKAxYKSx+QyjFhAM4QEJov8EnYVfAYqjsfmA5hZQ6AFU7QMSBzT3Ac3jgOYW0DyIhr4FNI8Dmlsw9ONg1AcoIUDz0hQAbegGGXzv/l0AAAAASUVORK5CYII="/>
+            </button>
+        </div>
+        <nav id="menu" class="barra-navegacion bg-[#131313] py-2 hidden lg:block">
+            <div class="container mx-auto">
+                <ul class="menu flex flex-col lg:flex-row justify-center space-y-2 lg:space-y-0 lg:space-x-4">
+                    <li><a href="perfiladmin.html" class="text-white hover:underline">Perfil</a></li>
+                    <li><a href="index.html" class="text-white hover:underline">Inicio</a></li>
+                    <li><a href="hombres.html" class="text-white hover:underline">Ropa</a></li>
+                    <li><a href="novedades.html" class="text-white hover:underline">Novedades</a></li>
+                    <li><a href="sobre-nosotros.html" class="text-white hover:underline">Sobre Nosotros</a></li>
+                    <li><a href="contacto.html" class="text-white hover:underline">Contactanos</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="carrito-seccion p-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Tus Productos</h2>
+        <div id="carrito-productos" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <button id="vaciar-carrito" class="mt-4 block mx-auto bg-red-600 p-2 text-white rounded-md">Vaciar Carrito</button>
+        <p id="total-pagar" class="text-xl font-bold text-right mt-4">Total a Pagar: $0.00</p>
+    </section>
+
+    <footer class="pie-pagina bg-[#2B2B2B] text-white p-4 text-center">
+        <p>&copy; 2024 Mi Tienda de Ropa. Todos los derechos reservados.</p>
+    </footer>
+    
+    <script>
+        let carritoAnterior = JSON.parse(localStorage.getItem('carrito')) || [];
+        let productosDesdeDB = [];
+        let notificacionesActivas = [];
+    
+        async function cargarProductosDesdeDB() {
+            try {
+                const response = await fetch('http://localhost:3000/productos');
+                if (!response.ok) throw new Error('Error al cargar los productos');
+                productosDesdeDB = await response.json();
+                console.log('Productos desde la base de datos:', productosDesdeDB);
+            } catch (error) {
+                console.error(error);
+                mostrarNotificacion('No se pudieron cargar los productos desde la base de datos.', 'error');
+            }
+        }
+    
+        async function cargarCarrito() {
+            await cargarProductosDesdeDB();
+    
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            const contenedor = document.getElementById('carrito-productos');
+            contenedor.innerHTML = '';
+    
+            if (carrito.length === 0) {
+                contenedor.innerHTML = '<p class="text-center">Tu carrito está vacío.</p>';
+                actualizarTotal(); // Actualizar total si el carrito está vacío
+                return;
+            }
+    
+            carrito.forEach((producto, index) => {
+                const productoDB = productosDesdeDB.find(p => p.pro_id === Number(producto.id));
+    
+                const productoDiv = document.createElement('div');
+                productoDiv.className = 'producto bg-white shadow-md p-4 text-center rounded-md max-w-xs mx-auto';
+                const botonAccion = productoDB && productoDB.pro_stock > 0 
+                    ? `<a href="#" class="boton-cta mt-2 block text-center text-white bg-green-600 p-2 rounded-md" data-id="${producto.id}">Comprar</a>` 
+                    : `<span class="text-red-600 font-bold mt-2 block">Agotado</span>`;
+    
+                productoDiv.innerHTML = `
+                    <div class="relative">
+                        <img src="${producto.img}" alt="${producto.nombre}" class="product-image mx-auto rounded-md">
+                        <h3 class="text-lg font-bold mt-2 text-black">${producto.nombre}</h3>
+                        <p class="text-gray-600">$${producto.precio}</p>
+                        <p class="text-gray-600">Cantidad: 
+                            <button class="decrementar" data-index="${index}">-</button>
+                            <span class="cantidad">${producto.cantidad}</span>
+                            <button class="incrementar" data-index="${index}">+</button>
+                        </p>
+                        <p class="text-gray-600">Stock disponible: ${productoDB ? productoDB.pro_stock : 'No disponible'}</p>
+                        <p class="text-red-600 underline cursor-pointer eliminar" data-index="${index}">Eliminar producto</p>
+                    </div>
+                `;
+    
+                contenedor.appendChild(productoDiv);
+            });
+    
+            document.getElementById('vaciar-carrito').addEventListener('click', () => {
+    localStorage.removeItem('carrito'); // Elimina el carrito del localStorage
+    cargarCarrito(); // Recarga el carrito para reflejar los cambios
+    mostrarNotificacion('El carrito ha sido vaciado.', 'success'); // Notificación opcional
+});
+
+            document.querySelectorAll('.incrementar').forEach(boton => {
+                boton.addEventListener('click', (event) => {
+                    const index = event.target.getAttribute('data-index');
+                    incrementarCantidad(index);
+                });
+            });
+    
+            document.querySelectorAll('.decrementar').forEach(boton => {
+                boton.addEventListener('click', (event) => {
+                    const index = event.target.getAttribute('data-index');
+                    decrementarCantidad(index);
+                });
+            });
+    
+            document.querySelectorAll('.eliminar').forEach(boton => {
+                boton.addEventListener('click', (event) => {
+                    const index = event.target.getAttribute('data-index');
+                    eliminarProducto(index);
+                });
+            });
+    
+            actualizarTotal(); // Actualizar el total al cargar el carrito
+        }
+    
+        function eliminarProducto(index) {
+            let carrito = JSON.parse(localStorage.getItem('carrito'));
+            carrito.splice(index, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            cargarCarrito();
+            mostrarNotificacion('Producto eliminado del carrito.', 'gris');
+        }
+    
+        function incrementarCantidad(index) {
+            let carrito = JSON.parse(localStorage.getItem('carrito'));
+            const producto = carrito[index];
+            const productoDB = productosDesdeDB.find(p => p.pro_id === Number(producto.id));
+            if (productoDB && producto.cantidad < productoDB.pro_stock) {
+                producto.cantidad++;
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                cargarCarrito();
+                mostrarNotificacion('Cantidad incrementada.', 'success');
+            } else {
+                mostrarNotificacion('Has alcanzado el límite del stock disponible para este producto.', 'error');
+            }
+            actualizarTotal(); // Actualizar el total después de incrementar la cantidad
+        }
+    
+        function decrementarCantidad(index) {
+            let carrito = JSON.parse(localStorage.getItem('carrito'));
+            const producto = carrito[index];
+    
+            if (producto.cantidad > 1) {
+                producto.cantidad--;
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                cargarCarrito();
+                mostrarNotificacion('Cantidad decrementada.', 'success');
+            } else {
+                mostrarNotificacion('No puedes tener menos de 1 producto.', 'error');
+            }
+            actualizarTotal(); // Actualizar el total después de decrementar la cantidad
+        }
+    
+        function actualizarTotal() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            const total = carrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
+            document.getElementById('total-pagar').textContent = `Total a Pagar: $${total.toFixed(2)}`;
+        }
+    
+        async function generarFactura() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario Anónimo';
+    const fecha = new Date().toLocaleDateString();
+
+    doc.setFontSize(22);
+    doc.text('Factura de Compra', 105, 20, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text(`Cliente: ${nombreUsuario}`, 10, 30);
+    doc.text(`Fecha: ${fecha}`, 10, 40);
+    doc.setFontSize(16);
+    doc.text('Productos Seleccionados:', 10, 50);
+
+    const startY = 60;
+    const lineHeight = 10;
+    doc.setFontSize(14);
+    doc.setFont('bold');
+    doc.text('Producto', 10, startY);
+    doc.text('Cantidad', 80, startY);
+    doc.text('Precio (sin IVA)', 130, startY);
+    doc.text('IVA (15%)', 170, startY);
+    doc.text('Total', 210, startY);
+    doc.setFont('normal');
+
+    let y = startY + lineHeight;
+    let subtotalSinIVA = 0;
+    let ivaTotal = 0;
+
+    carrito.forEach(producto => {
+        const precioSinIVA = producto.precio / 1.15;
+        const ivaProducto = precioSinIVA * 0.15;
+        const totalProducto = precioSinIVA + ivaProducto;
+        subtotalSinIVA += precioSinIVA * producto.cantidad;
+        ivaTotal += ivaProducto * producto.cantidad;
+
+        doc.text(producto.nombre, 10, y);
+        doc.text(`${producto.cantidad}`, 80, y);
+        doc.text(`$${precioSinIVA.toFixed(2)}`, 130, y);
+        doc.text(`$${ivaProducto.toFixed(2)}`, 170, y);
+        doc.text(`$${totalProducto.toFixed(2)}`, 210, y);
+        y += lineHeight;
+    });
+
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.5);
+    doc.line(10, y, 210, y);
+    y += 5;
+
+    const totalConIVA = subtotalSinIVA + ivaTotal;
+    doc.setFontSize(16);
+
+    doc.text('Subtotal (sin IVA):', 130, y);
+    doc.text(`$${subtotalSinIVA.toFixed(2)}`, 180, y);
+    y += lineHeight;
+
+    doc.text('IVA Total (15%):', 130, y);
+    doc.text(`$${ivaTotal.toFixed(2)}`, 180, y);
+    y += lineHeight;
+
+    doc.text('Total a Pagar:', 130, y);
+    doc.text(`$${totalConIVA.toFixed(2)}`, 180, y);
+    
+    doc.setFontSize(10);
+    doc.text('Gracias por su compra!', 105, y + 20, { align: 'center' });
+
+    doc.save('Factura.pdf');
+
+    try {
+        const response = await fetch('http://localhost:3000/actualizarStock', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(carrito.map(producto => ({
+                pro_id: producto.id,
+                cantidad: producto.cantidad
+            })))
+        });
+
+        if (!response.ok) throw new Error('Error al actualizar el stock en el servidor');
+
+        localStorage.removeItem('carrito');
+        cargarCarrito();
+        mostrarNotificacion('Compra realizada. Factura descargada en PDF.', 'success');
+    } catch (error) {
+        console.error(error);
+        mostrarNotificacion('Hubo un problema al actualizar el stock.', 'error');
+    }
+}
+
+    
+        const btnComprar = document.createElement('button');
+        btnComprar.innerText = 'Comprar lo Seleccionado';
+        btnComprar.className = 'mt-4 block mx-auto bg-green-600 p-2 text-white rounded-md';
+        btnComprar.addEventListener('click', generarFactura);
+        document.querySelector('.carrito-seccion').appendChild(btnComprar);
+    
+        function mostrarNotificacion(mensaje, tipo) {
+            const notificacion = document.createElement('div');
+            notificacion.className = `notificacion fixed right-4 bg-${tipo === 'success' ? 'green-600' : tipo === 'error' ? 'red-600' : 'gray-600'} text-white p-3 rounded-md shadow-md transition-all`;
+            notificacion.style.bottom = `${notificacionesActivas.length * 60}px`; 
+            notificacion.textContent = mensaje;
+            setTimeout(() => {
+                if (document.body.contains(notificacion)) {
+                    document.body.removeChild(notificacion);
+                    notificacionesActivas.shift(); 
+                    ajustarNotificaciones();
+                }
+            }, 3000);
+    
+            document.body.appendChild(notificacion);
+            notificacionesActivas.push(notificacion); 
+        }
+    
+        function ajustarNotificaciones() {
+            notificacionesActivas.forEach((notificacion, index) => {
+                notificacion.style.bottom = `${index * 60}px`;
+            });
+        }
+    
+        window.onload = async () => {
+            await cargarCarrito();
+            setInterval(cargarCarrito, 1000); 
+        };
+    </script>
+</body>
+</html>

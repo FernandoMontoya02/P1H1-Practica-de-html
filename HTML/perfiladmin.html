@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Mi Tienda de Ropa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            /* Color de fondo más suave */
+            color: #4a4a4a;
+            /* Color de texto más oscuro para mejor contraste */
+            line-height: 1.6;
+            /* Mejora la legibilidad */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estilo general del contenedor de productos */
+        #productosContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* Tres columnas */
+            gap: 20px;
+            /* Espacio entre las cartas */
+            margin-top: 20px;
+        }
+
+        /* Estilo de cada carta de producto */
+        .producto {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 15px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1),
+                -5px -5px 15px rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            /* Para evitar que el contenido desborde */
+        }
+
+        /* Efecto hover para las cartas */
+        .producto:hover {
+            transform: translateY(-10px);
+            box-shadow: 5px 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilo de la imagen del producto */
+        .product-image {
+            width: 100%;
+            /* 100% del ancho de la carta */
+            height: 200px;
+            /* Altura fija para todas las imágenes */
+            object-fit: cover;
+            /* Mantiene la proporción de la imagen */
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Estilo de los botones */
+        .boton-editar,
+        .boton-eliminar {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .boton-editar {
+            background-color: #4CAF50;
+            /* Verde */
+            color: white;
+            font-weight: bold;
+        }
+
+        .boton-editar:hover {
+            background-color: #45a049;
+            /* Verde más oscuro */
+            transform: translateY(-2px);
+            /* Efecto de desplazamiento */
+        }
+
+        .boton-eliminar {
+            background-color: #f44336;
+            /* Rojo */
+            color: white;
+            font-weight: bold;
+        }
+
+        .boton-eliminar:hover {
+            background-color: #e53935;
+            /* Rojo más oscuro */
+            transform: translateY(-2px);
+            /* Efecto de desplazamiento */
+        }
+
+        /* Estilo de los textos */
+        h3 {
+            font-size: 1.6em;
+            margin: 10px 0;
+            color: #333;
+            font-weight: 700;
+            /* Más negrita */
+            text-transform: uppercase;
+            /* Mayúsculas para mayor énfasis */
+        }
+
+        p {
+            font-size: 1em;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        /* Estilo específico para el precio */
+        .producto .precio {
+            font-size: 1.3em;
+            /* Tamaño de fuente más grande para el precio */
+            color: #e53935;
+            /* Color llamativo */
+            font-weight: bold;
+            /* Negrita para el precio */
+        }
+
+        /* Estilo específico para el estado y stock */
+        .producto .estado,
+        .producto .stock {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Estilo de un contenedor para texto y botones */
+        .texto-botones {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Centrar los elementos */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-[#131313] p-4 text-center">
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-bold text-white mx-auto">Mi Tienda de Ropa</h1>
+            <button id="menu-btn" class="block lg:hidden bg-white text-[#131313] p-2 rounded-md">
+                <img alt="Menú" class="h-6 w-6"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAExJREFUSEtjZKAxYKSx+QyjFhAM4QEJov8EnYVfAYqjsfmA5hZQ6AFU7QMSBzT3Ac3jgOYW0DyIhr4FNI8Dmlsw9ONg1AcoIUDz0hQAbegGGXzv/l0AAAAASUVORK5CYII=" />
+            </button>
+        </div>
+        <nav id="menu" class="barra-navegacion bg-[#131313] py-2 hidden lg:block">
+            <ul class="menu flex flex-col lg:flex-row justify-center space-y-2 lg:space-y-0 lg:space-x-4">
+                <li><a href="perfiladmin.html" class="text-white hover:underline">Perfil</a></li>
+                <li><a href="index.html" class="text-white hover:underline">Inicio</a></li>
+                <li><a href="hombres.html" class="text-white hover:underline">Ropa</a></li>
+                <li><a href="novedades.html" class="text-white hover:underline">Novedades</a></li>
+                <li><a href="sobre-nosotros.html" class="text-white hover:underline">Sobre Nosotros</a></li>
+                <li><a href="contacto.html" class="text-white hover:underline">Contactanos</a></li>
+                <li><a href="#" id="logout-btn" class="text-red-500 hover:underline">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto p-6">
+        <section>
+            <button id="abrirModalAgregar"
+                class="bg-red-500 text-white px-4 py-2 font-bold rounded hover:bg-red-600 transition duration-300">
+                Agregar Producto
+            </button>
+
+            <!-- Modal para agregar producto -->
+            <div id="modalAgregar"
+                class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white p-8 rounded-lg max-w-md w-full shadow-lg relative">
+                    <span id="cerrarModalAgregar"
+                        class="text-red-500 text-3xl cursor-pointer absolute top-4 right-4">&times;</span>
+                    <h2 class="text-2xl font-semibold mb-4">Agregar Producto</h2>
+                    <form id="agregarProductoForm" class="space-y-4">
+                        <input type="text" id="pro_nom" placeholder="Nombre del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="pro_des" placeholder="Descripción del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="pro_est" placeholder="Estado del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="number" id="pro_pre" placeholder="Precio" step="0.01" required
+                            class="w-full border p-2 rounded">
+                        <input type="number" id="pro_stock" placeholder="Stock" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="pro_img" placeholder="URL de la imagen" required
+                            class="w-full border p-2 rounded">
+                        <button type="submit"
+                            class="bg-red-500 text-white w-full py-2 rounded font-bold hover:bg-red-600 transition duration-300">
+                            Agregar Producto
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal para editar producto -->
+            <div id="modalEditar"
+                class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                <div class="bg-white p-8 rounded-lg max-w-md w-full shadow-lg relative">
+                    <span id="cerrarModalEditar"
+                        class="text-red-500 text-3xl cursor-pointer absolute top-4 right-4">&times;</span>
+                    <h2 class="text-2xl font-semibold mb-4">Editar Producto</h2>
+                    <form id="editarProductoForm" class="space-y-4">
+                        <span id="pro_id_display" class="font-bold"></span>
+                        <input type="text" id="edit_pro_nom" placeholder="Nombre del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="edit_pro_des" placeholder="Descripción del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="edit_pro_est" placeholder="Estado del producto" required
+                            class="w-full border p-2 rounded">
+                        <input type="number" id="edit_pro_pre" placeholder="Precio" step="0.01" required
+                            class="w-full border p-2 rounded">
+                        <input type="number" id="edit_pro_stock" placeholder="Stock" required
+                            class="w-full border p-2 rounded">
+                        <input type="text" id="edit_pro_img" placeholder="URL de la imagen" required
+                            class="w-full border p-2 rounded">
+                        <button type="submit"
+                            class="bg-red-500 text-white w-full py-2 rounded font-bold hover:bg-red-600 transition duration-300">
+                            Editar Producto
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Contenedor de productos -->
+            <div id="productosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                <!-- Los productos se agregarán aquí dinámicamente -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-[#131313] text-white text-center py-4 mt-8">
+        <p>&copy; 2024 Mi Tienda de Ropa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const logoutBtn = document.getElementById('logout-btn');
+
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'inicio.html';
+        });
+
+        document.getElementById("abrirModalAgregar").addEventListener("click", function () {
+            document.getElementById('modalAgregar').classList.remove('hidden');
+        });
+
+        document.getElementById("cerrarModalAgregar").addEventListener("click", function () {
+            document.getElementById('modalAgregar').classList.add('hidden');
+        });
+
+        document.getElementById("cerrarModalEditar").addEventListener("click", function () {
+            document.getElementById('modalEditar').classList.add('hidden');
+        });
+
+
+        // Función para agregar un producto
+        document.getElementById('agregarProductoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nuevoProducto = {
+                pro_nom: document.getElementById('pro_nom').value,
+                pro_des: document.getElementById('pro_des').value,
+                pro_est: document.getElementById('pro_est').value,
+                pro_pre: parseFloat(document.getElementById('pro_pre').value),
+                pro_stock: parseInt(document.getElementById('pro_stock').value),
+                pro_img: document.getElementById('pro_img').value || null
+            };
+            try {
+                const response = await fetch('http://localhost:3000/agregarProducto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevoProducto)
+                });
+                if (response.ok) {
+                    alert('Producto agregado correctamente');
+                    document.getElementById('agregarProductoForm').reset();
+                    document.getElementById('modalAgregar').style.display = "none";
+                    mostrarProductos();
+                } else {
+                    alert('Error al agregar el producto');
+                }
+            } catch (error) {
+                console.error('Error al enviar la solicitud:', error);
+                alert('Error en la conexión con el servidor');
+            }
+        });
+
+        // Función para editar un producto
+        async function editarProducto(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/productos/${id}`);
+                const producto = await response.json();
+                document.getElementById('pro_id_display').textContent = `ID: ${producto.pro_id}`;
+                document.getElementById('edit_pro_nom').value = producto.pro_nom;
+                document.getElementById('edit_pro_des').value = producto.pro_des;
+                document.getElementById('edit_pro_est').value = producto.pro_est;
+                document.getElementById('edit_pro_pre').value = producto.pro_pre;
+                document.getElementById('edit_pro_stock').value = producto.pro_stock;
+                document.getElementById('edit_pro_img').value = producto.pro_img;
+                document.getElementById('modalEditar').style.display = "block";
+                document.getElementById('editarProductoForm').onsubmit = async (e) => {
+                    e.preventDefault();
+                    const productoActualizado = {
+                        pro_nom: document.getElementById('edit_pro_nom').value,
+                        pro_des: document.getElementById('edit_pro_des').value,
+                        pro_est: document.getElementById('edit_pro_est').value,
+                        pro_pre: parseFloat(document.getElementById('edit_pro_pre').value),
+                        pro_stock: parseInt(document.getElementById('edit_pro_stock').value),
+                        pro_img: document.getElementById('edit_pro_img').value || null
+                    };
+                    try {
+                        const updateResponse = await fetch(`http://localhost:3000/editarProducto/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(productoActualizado)
+                        });
+                        if (updateResponse.ok) {
+                            alert('Producto editado correctamente');
+                            document.getElementById('editarProductoForm').reset();
+                            document.getElementById('modalEditar').style.display = "none";
+                            mostrarProductos();
+                        } else {
+                            alert('Error al editar el producto');
+                        }
+                    } catch (error) {
+                        console.error('Error al enviar la solicitud de edición:', error);
+                        alert('Error en la conexión con el servidor');
+                    }
+                };
+            } catch (error) {
+                console.error('Error al obtener el producto:', error);
+                alert('Error al cargar el producto para edición');
+            }
+        }
+        // Función para eliminar un producto
+        async function eliminarProducto(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                try {
+                    const response = await fetch(`http://localhost:3000/eliminarProducto/${id}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (response.ok) {
+                        alert('Producto eliminado correctamente');
+                        mostrarProductos();
+                    } else {
+                        alert('Error al eliminar el producto');
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar el producto:', error);
+                    alert('Error en la conexión con el servidor');
+                }
+            }
+        }
+
+        // Función para mostrar productos
+        async function mostrarProductos() {
+            try {
+                const response = await fetch('http://localhost:3000/productos');
+                const productos = await response.json();
+                const productosContainer = document.getElementById('productosContainer');
+                productosContainer.innerHTML = '';
+                productos.forEach(producto => {
+                    const productoDiv = document.createElement('div');
+                    productoDiv.className = 'producto';
+                    productoDiv.innerHTML = `
+                    <h3>${producto.pro_nom}</h3>
+                    <img src="${producto.pro_img}" alt="${producto.pro_nom}" class="product-image">
+                    <p>Estado: ${producto.pro_est}</p>
+                    <p>Precio: $${producto.pro_pre}</p>
+                    <p>Stock: ${producto.pro_stock}</p>
+                    <button onclick="editarProducto(${producto.pro_id})" class="boton-editar">Editar</button>
+                    <button onclick="eliminarProducto(${producto.pro_id})" class="boton-eliminar">Eliminar</button>
+                    `;
+                    productosContainer.appendChild(productoDiv);
+                });
+            } catch (error) {
+                console.error('Error al cargar los productos:', error);
+            }
+        }
+        mostrarProductos();
+    </script>
+
+</body>
+
+</html>

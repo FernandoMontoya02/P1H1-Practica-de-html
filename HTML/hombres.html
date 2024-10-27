@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hombres - Mi Tienda de Ropa</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white">
+
+    <header class="bg-[#131313] p-4 text-center"> 
+        <div class="flex justify-between items-center">
+            <div class="flex items-center relative">
+                <div class="bg-white p-1 rounded-full shadow hover:shadow-lg transition-shadow duration-200"> 
+                    <a href="carrito.html">
+                        <img id="icono-carrito" 
+                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAAXNSR0IArs4c6QAAATJJREFUOE+t1D8oRlEcxvHPa2EyGKSYLHb/ymiSlJIYFYMsdoWJlMGoGAwGg8huU4okNqUsMhiEVfl/j+6tt7f33vdevWc6dU7f8/ye8/x+JXVcpTqyJLBujOIN+7j/zyMJbBbbMSCAuvBeFFhZ5jgOMVcGz82shDXgAR/YzUn5wiZeq33AIlZzgpJr61ioBmvFI86xXAM6hWkM4iQtGnuYRBteMoC3aEQnftJgAziLvAslr6XA+nERq/+zJSu0N2hBO76rALciO0KkOmJbMmEz2EGIy1EFrAnPOI3UDSdnWcqCF09ozvAs+HqQBxbu9GEkBRayGCLxmRc2hDFs4K4MmkRmpfyhWlPjEr1xa4UWCysMhat43xMNiOu8yuYRgrmE4zIViU8TRZQV6qpaZRaC/QIWDDIUd3LFtQAAAABJRU5ErkJggg==" 
+                             class="h-8 w-8 mr-2 cursor-pointer transition-transform duration-200 hover:scale-105" 
+                             alt="Carrito" 
+                             aria-label="Abrir carrito" />
+                    </a>
+                </div>
+                <span id="notificacion-carrito" class="bg-red-600 h-3 w-3 rounded-full absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2" 
+                      aria-label="Notificación de productos en el carrito" role="status"></span>
+            </div>
+            
+            <h1 class="text-4xl font-bold text-white mx-auto">Mi Tienda de Ropa</h1>
+            <button id="menu-btn" class="block lg:hidden bg-gray-600 text-white p-2"> <!-- Cambiado a gris -->
+                <img alt="Menú" class="h-6 w-6" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAExJREFUSEtjZKAxYKSx+QyjFhAM4QEJov8EnYVfAYqjsfmA5hZQ6AFU7QMSBzT3Ac3jgOYW0DyIhr4FNI8Dmlsw9ONg1AcoIUDz0hQAbegGGXzv/l0AAAAASUVORK5CYII="/>
+            </button>
+        </div>
+        <nav id="menu" class="barra-navegacion bg-[#131313] py-2 hidden lg:block">
+            <div class="container mx-auto">
+                <ul class="menu flex flex-col lg:flex-row justify-center space-y-2 lg:space-y-0 lg:space-x-4">
+                    <li><a href="perfiladmin.html" class="text-white hover:underline">Perfil</a></li>
+                    <li><a href="index.html" class="text-white hover:underline">Inicio</a></li>
+                    <li><a href="hombres.html" class="text-white hover:underline">Ropa</a></li>
+                    <li><a href="novedades.html" class="text-white hover:underline">Novedades</a></li>
+                    <li><a href="sobre-nosotros.html" class="text-white hover:underline">Sobre Nosotros</a></li>
+                    <li><a href="contacto.html" class="text-white hover:underline">Contactanos</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <section class="hombres-seccion p-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Colección para Hombres</h2>
+        <div id="productos" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+    </section>
+
+    <footer class="pie-pagina bg-[#2B2B2B] text-white p-4">
+        <div class="container mx-auto text-center">
+            <p>Síguenos en nuestras redes:</p>
+            <div class="flex justify-center space-x-8 mt-3">
+                <a href="#" class="text-white bg-white rounded-md">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAcFJREFUSEu11T+oT2EYwPHPLYUwyCIki0GRjKRkEJIuMYgsFDKIlAzyJxnUFQburTtYlEEU+TORQWajvyXCYjAoinCeen86vZ3znt8P92znff58n+d9/rxDJvgbmmD/ugCTsQXrsBQL8Atv8BT3cRPf2wItAdbjcnJaSvQV9uFBk1Ib4GQV6YkBru8njuBcbtMEOIXjAzivqx7ExfpBDtiI2wXnn3AYj/A26Y2ks/iNTFbhcc9HHTAdLzG7BfADi/E8k9cBIQr5kl7h64Ao1Ggh+mvYXpOvwQqsxfLMbhNuxVkdcAcbCoBjOJPkW3G9oDuOPTngPeYUjA7hQpJHMc8XdGNGluWAr5jynwCfq26amQO+YFoG+NiRVag/xOrMLnzNyAEvsDBT/IC5HTPxDvMynWdYlAOuVm26Y8AMYld9awjgSjUnu3LANkQrtn2DFLmxTSfhNea3EPoF/LmePIP4jw167x8AscpX4knPR9Oyi2V1oAHSTwan80XZBIizsd4k1kBdgLNVwY/mgZUenJ1pWmclozZAbIC9uNt0tV1P5lTsxub0NF5KTvZjuNqaNxAt+VdPZsd89SfuyqA/LwWt33YeVhnsaaE0AAAAAElFTkSuQmCC">
+                </a>
+                <a href="#" class="text-white bg-white rounded-md">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAeNJREFUSEvF1T+ozmEUB/DPdUlSN5KUwcLtJv/jjpiMZHCVYjESxSCDlAwGJYrproRBYpJFuotYkKRkUCYWhZL/z9Hze3s8fr/cN73dM73vOec533O+589vyIBlaMDxzRjAchzFZqymM5GfeIYpnMfLmpG2Cg5k5zl90vcVBzFZvqsBNuIhZvUZvHH/hk140ihqgJvY2Ufwt1iDCVzM724k2nZ1AbzGshaANziD51iEMRxH+AdAZP0ov3uFFV0AHzG/AribM/qAxdn2DqtwB59SzxZgSbaF30gbQPD+vQoegUZzsL3Yipic+ynLyxjOE1Q+iz70BqTsQSi/VABncSxlfgkxXaUE54dwG9sLQyQ5u62CUMaolbIft3LGsQ+lPMU6nEx7cqow/MiV/VaVFcTvMJYSc30tUXMPayvb4wS+ASdSwNOVrRe3HtPgt5TgeR8u4HBli809kivcUdg6exA+NUBUtB7zsAdbcqBo8tU0unNbmvw5+/9FUSjaxjRmPZYvKCkl7lTQt7TSv08VL2x0NUVxrHpLUjUuNrRctG1V4ObvC6zsArieguzueDhd9RXEzrRSNI4H/3ns4mDGCLcChHKg57oBLj84ccy6pPzgnEsjHYfuD5mxT+Z0G/pPv4FX8AszSlgZRYBdrAAAAABJRU5ErkJggg=="/>
+                </a>
+                <a href="#" class="text-white bg-white rounded-md">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAi9JREFUSEvN1UnITnEUBvDfx8JMdoREiChThg1JmVI2hqIUiTInZcGGYiE2xpQSxUKxUJJZSCFiY0ghsjKkKGS+R+f7ent77/vafPWd1e3e8z/P/zznOc9t0srR1Mr1tQmAsViAyRiCX7iFO7iAB/VYqNdBPxzGDHzOQk/wDaMxEj2wG1vwvRZQGUDc9Bo6YAOO40+NAmsT4AXm4VF1Ti2AXriXVEzF8wZCGFF0dAbtMBxfKvNrAZzDeIzDy4KmPuiGp3WAAuQ+jmBlPYBJuIFlmTwsu3mHASU0NdfbjB2YjkvNL6s72Iel6FkM7kfR7ibszOQY9sU6XXRKMQRdc8sAHuI15mTCKhzI5wA+2mAecT5iVBnAm4L/mMGKTOidc/iIkO3PBgCHsAjdywCe5bAWVhQKKe7FQaxpMIegcz06lgGcT/4nVN30ZG5z8BuAnZOuUM2pomh0GBF5YzC4DGB7DrYv3laAtC+A92A1PvHPw0K6EbvyTOzBe5zG8jKAgblY24qErTX4npZ0Dc1vvzEzZRncn0hraVFbrUULJYShhcmVRdAQg3yVIuiPuwivmlJ5qBqgS/IZ+7CxgWKaP0fxywkY2x8yb4lqgNk4W9C0GNF+bOXtYouP4WsVYMxpCdalssK3Gprd/hxkc604MCit+HrSEa4aXjUxk27m9tc0xeoOwkMi8SquFJL8UNhx1+Jm84sfzCyEfMNGHqdnhUSD+9JoE7/M/5x17bRW7+Av0jpxGTt6Zt0AAAAASUVORK5CYII=">
+                </a>
+            </div>
+            <p class="mt-2">&copy; 2024 Mi Tienda de Ropa. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+    
+        menuBtn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+        
+
+        function actualizarNotificacionCarrito() {
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const notificacion = document.getElementById('notificacion-carrito');
+        if (carrito.length > 0) {
+            notificacion.style.display = 'block';
+        } else {
+            notificacion.style.display = 'none';
+        }
+    }
+
+    // Llama a esta función al cargar la página y después de agregar un producto al carrito
+    document.addEventListener('DOMContentLoaded', actualizarNotificacionCarrito);
+    
+        // Función para cargar productos
+        async function cargarProductos() {
+            try {
+                const response = await fetch('http://localhost:3000/productos');
+                if (!response.ok) throw new Error('Error al cargar productos');
+    
+                const productos = await response.json();
+                const contenedor = document.getElementById('productos');
+                contenedor.innerHTML = '';
+    
+                productos.forEach(producto => {
+                    const productoDiv = document.createElement('div');
+                    productoDiv.className = 'producto bg-white shadow-md p-4 text-center rounded-md max-w-xs mx-auto';
+    
+                    // Verificar si el producto está en stock
+                    const botonAccion = producto.pro_stock > 0
+                        ? `<a href="#" class="boton-cta mt-2 block text-center text-white bg-green-600 p-2 rounded-md"
+                               data-id="${producto.pro_id}"
+                               data-nombre="${producto.pro_nom}"
+                               data-precio="${producto.pro_pre}"
+                               data-img="${producto.pro_img}"
+                               data-stock="${producto.pro_stock}">Comprar</a>`
+                        : `<span class="agotado text-center text-white bg-red-600 p-2 rounded-md mt-2 block">Agotado</span>`;
+    
+                    productoDiv.innerHTML = `
+                        <img src="${producto.pro_img}" alt="${producto.pro_nom}" class="product-image mx-auto rounded-md">
+                        <h3 class="text-lg font-bold mt-2 text-black">${producto.pro_nom}</h3>
+                        <p class="text-gray-600">$${producto.pro_pre}</p>
+                        ${botonAccion}
+                    `;
+    
+                    contenedor.appendChild(productoDiv);
+                });
+    
+                // Asignar evento de click a cada botón "Comprar"
+                document.querySelectorAll('.boton-cta').forEach(boton => {
+                    boton.addEventListener('click', (event) => {
+                        event.preventDefault();  // Evita el salto de página
+                        const producto = {
+                            id: event.target.getAttribute('data-id'),
+                            nombre: event.target.getAttribute('data-nombre'),
+                            precio: parseFloat(event.target.getAttribute('data-precio')), // Convertir a número
+                            img: event.target.getAttribute('data-img'),
+                            stock: parseInt(event.target.getAttribute('data-stock')), // Convertir a número
+                            cantidad: 1  // Se inicia con una cantidad de 1
+                        };
+                        agregarAlCarrito(producto);
+                    });
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    
+        // Función para agregar un producto al carrito
+        function agregarAlCarrito(producto) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            const existeProducto = carrito.find(item => item.id === producto.id);
+            if (existeProducto) {
+                // Si el producto ya está en el carrito, aumentamos la cantidad, pero no más allá del stock
+                if (existeProducto.cantidad < producto.stock) {
+                    existeProducto.cantidad++;
+                } else {
+                    alert('No puedes agregar más de este producto, ya que se ha alcanzado el límite del stock.');
+                    return;
+                }
+            } else {
+                carrito.push(producto);
+            }
+    
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            mostrarNotificacion(`${producto.nombre} ha sido añadido al carrito.`);
+        }
+    
+        // Función para mostrar una notificación de producto añadido
+        function mostrarNotificacion(mensaje) {
+            const notificacion = document.createElement('div');
+            notificacion.className = 'notificacion';
+            notificacion.innerText = mensaje;
+            document.body.appendChild(notificacion);
+            setTimeout(() => {
+                notificacion.remove();
+            }, 2000);
+        }
+    
+        window.onload = () => {
+            cargarProductos(); 
+            setInterval(cargarProductos, 1000); 
+        };
+    </script>    
+    
+    <style>
+        /* Estilo para la notificación */
+        .notificacion {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333; /* Color oscuro de fondo */
+            color: #fff; /* Color de texto */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            opacity: 0.9;
+            z-index: 1000;
+        }
+    
+        /* Estilo para el estado "Agotado" */
+        .agotado {
+            background-color: #e3342f; /* Color de fondo rojo para indicar que está agotado */
+            color: #fff; /* Color de texto blanco */
+        }
+    </style>    
+    
+</body>
+</html>
